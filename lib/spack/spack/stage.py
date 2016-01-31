@@ -26,7 +26,6 @@ import os
 import re
 import shutil
 import tempfile
-import sys
 from urlparse import urljoin
 
 import llnl.util.tty as tty
