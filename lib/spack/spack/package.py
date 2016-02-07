@@ -856,6 +856,10 @@ class Package(object):
         if not self.spec.concrete:
             raise ValueError("Can only install concrete packages.")
 
+        if self.spec.external:
+            tty.msg("%s is externally installed in %s." % (self.name, self.spec.external))
+            return
+
         if os.path.exists(self.prefix):
             tty.msg("%s is already installed in %s." % (self.name, self.prefix))
             return

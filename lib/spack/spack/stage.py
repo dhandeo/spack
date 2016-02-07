@@ -26,6 +26,7 @@ import os
 import re
 import shutil
 import tempfile
+import sys
 from urlparse import urljoin
 
 import llnl.util.tty as tty
@@ -382,7 +383,6 @@ def _get_mirrors():
     """Get mirrors from spack configuration."""
     config = spack.config.get_config('mirrors')
     return [val for name, val in config.iteritems()]
-
 
 
 def ensure_access(file=spack.stage_path):

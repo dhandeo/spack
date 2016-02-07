@@ -129,6 +129,7 @@ from ordereddict_backport import OrderedDict
 
 import llnl.util.tty as tty
 from llnl.util.filesystem import mkdirp
+import copy
 
 import spack
 from spack.error import SpackError
@@ -194,6 +195,39 @@ section_schemas = {
                 'default': [],
                 'items': {
                     'type': 'string'},},},},
+    'packages': {
+        '$schema': 'http://json-schema.org/schema#',
+        'title': 'Spack package configuration file schema',
+        'type': 'object',
+        'additionalProperties': False,
+        'patternProperties': {
+            r'packages:?': {
+                'type': 'object',
+                'default': {},
+                'additionalProperties': False,
+                'patternProperties': {
+                    r'\w[\w-]*': { # package name
+                        'type': 'object',
+                        'default': {},
+                        'additionalProperties': False,
+                        'properties': {
+                            'version': {
+                                'type' : 'array',
+                                'default' : [],
+                                'items' : { 'type' : 'string' } }, #version strings
+                            'compiler': {
+                                'type' : 'array',
+                                'default' : [],
+                                'items' : { 'type' : 'string' } }, #compiler specs
+                            'nobuild': {
+                                'type':  'boolean',
+                                'default': False,
+                             },
+                            'paths': {
+                                'type' : 'object',
+                                'default' : {},
+                            }
+                        },},},},},}
 }
 
 """OrderedDict of config scopes keyed by name.
@@ -492,6 +526,36 @@ def print_section(section):
         syaml.dump(data, stream=sys.stdout, default_flow_style=False)
     except (yaml.YAMLError, IOError) as e:
         raise ConfigError("Error reading configuration: %s" % section)
+
+
+def spec_externals(spec):
+    """Return a list of spec, directory pairs for each external location for spec"""
+    allpkgs = get_config('packages')
+    name = spec.name
+    spec_locations = []
+    
+    pkg_paths = allpkgs.get(name, {}).get('paths', None)
+    if not pkg_paths:
+        return []
+    
+    for pkg,path in pkg_paths.iteritems():
+        if not spec.satisfies(pkg):
+            continue
+        if not path:
+            continue
+        spec_locations.append( (spack.spec.Spec(pkg), path) )
+    return spec_locations
+
+
+def is_spec_nobuild(spec):
+    """Return true if the spec pkgspec is configured as nobuild"""
+    allpkgs = get_config('packages')
+    name = spec.name
+    if not spec.name in allpkgs:
+        return False
+    if not 'nobuild' in allpkgs[spec.name]:
+        return False
+    return allpkgs[spec.name]['nobuild']
 
 
 class ConfigError(SpackError): pass

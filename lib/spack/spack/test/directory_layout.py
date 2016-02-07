@@ -69,6 +69,9 @@ class DirectoryLayoutTest(MockPackagesTest):
         packages = list(spack.repo.all_packages())[:max_packages]
 
         for pkg in packages:
+            if pkg.name.startswith('external'):
+                #External package tests cannot be installed
+                continue            
             spec = pkg.spec
 
             # If a spec fails to concretize, just skip it.  If it is a
@@ -174,6 +177,9 @@ class DirectoryLayoutTest(MockPackagesTest):
         # Create install prefixes for all packages in the list
         installed_specs = {}
         for pkg in packages:
+            if pkg.name.startswith('external'):
+                #External package tests cannot be installed
+                continue
             spec = pkg.spec.concretized()
             installed_specs[spec.name] = spec
             self.layout.create_install_directory(spec)
