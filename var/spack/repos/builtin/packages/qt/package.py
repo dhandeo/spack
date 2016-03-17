@@ -8,8 +8,11 @@ class Qt(Package):
     list_url   = 'http://download.qt-project.org/official_releases/qt/'
     list_depth = 2
 
-    version('5.4.2', 'fa1c4d819b401b267eb246a543a63ea5',
-            url='http://download.qt-project.org/official_releases/qt/5.4/5.4.2/single/qt-everywhere-opensource-src-5.4.2.tar.gz')
+    version('5.6.0', '7a2a867bc12384f4161809136d49d4be',
+            url='http://download.qt.io/official_releases/qt/5.6/5.6.0/single/qt-everywhere-opensource-src-5.6.0.tar.gz')
+
+    version('5.5.1', '59f0216819152b77536cf660b015d784',
+            url='http://download.qt-project.org/official_releases/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.tar.gz')
 
     version('5.4.0', 'e8654e4b37dd98039ba20da7a53877e6',
             url='http://download.qt-project.org/official_releases/qt/5.4/5.4.0/single/qt-everywhere-opensource-src-5.4.0.tar.gz')
@@ -29,16 +32,19 @@ class Qt(Package):
     variant('mesa', default=False, description='depend on mesa')
     # Add patch for compile issues with qt3 found with use in the OpenSpeedShop project
     variant('krellpatch', default=False, description="build with openspeedshop based patch.")
+    variant('corewlanpatch', default=False, description="build with corewlan patch.")
+
     patch('qt3krell.patch', when='@3.3.8b+krellpatch')
+    #patch('qt4-corewlan-new-osx.patch', when='@4')
 
     # Use system openssl for security.
-    #depends_on("openssl")
+    depends_on("openssl")
 
     depends_on("glib")
-    depends_on("gtkplus")
+    #depends_on("gtkplus")
     depends_on("libxml2")
     depends_on("zlib")
-    depends_on("dbus", when='@4:')
+    #depends_on("dbus", when='@4:')
     depends_on("libtiff")
     depends_on("libpng")
     depends_on("libmng")
@@ -49,11 +55,11 @@ class Qt(Package):
     # depends_on("flex")
     # depends_on("bison")
     # depends_on("ruby")
-    # depends_on("icu4c")
+    depends_on("icu4c")
 
     # OpenGL hardware acceleration
-    depends_on("mesa", when='@4:+mesa')
-    depends_on("libxcb")
+    #depends_on("mesa", when='@4:+mesa')
+    #depends_on("libxcb")
 
 
     def setup_dependent_environment(self, module, spec, dep_spec):
@@ -88,8 +94,10 @@ class Qt(Package):
             "-release",
             '-shared',
             '-confirm-license',
-            '-openssl-linked',
-            '-dbus-linked',
+            #'-openssl-linked',
+            #'-dbus-linked',
+            '-no-dbus',
+            #'-no-phonon',
             '-optimized-qmake',
             '-no-openvg',
             '-no-pch',
@@ -112,16 +120,24 @@ class Qt(Package):
     def configure(self):
         configure('-fast',
                   '-no-webkit',
+                  # XXX(osx): sdk stuff; should depend on the architecture and the SDKs available.
+                  '-arch', 'x86_64',
+                  '-sdk', '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk',
+                  # XXX(osx): When using Xcode's clang rather than a GCC.
+                  '-platform', 'unsupported/macx-clang',
                   *self.common_config_args)
 
 
     @when('@5')
     def configure(self):
-        configure('-no-eglfs',
-                  '-no-directfb',
-                  '-qt-xcb',
+        configure(#'-no-eglfs',
+                  #'-no-directfb',
+                  #'-qt-xcb',
+                  #'-arch', 'x86_64',
+                  #'-sdk', 'macosx10.11',
                   # If someone wants to get a webkit build working, be my guest!
                   '-skip', 'qtwebkit',
+		  '-skip', 'qtwebengine',
                   *self.common_config_args)
 
 
