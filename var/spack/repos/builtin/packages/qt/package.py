@@ -137,10 +137,10 @@ class Qt(Package):
             '-release',
             '-shared',
             '-confirm-license',
-            '-openssl-linked',
+            #'-openssl-linked',
             #'-dbus-linked',
             '-no-dbus',
-            '-no-phonon',
+            #'-no-phonon',
             '-optimized-qmake',
             '-no-openvg',
             '-no-pch',
@@ -183,11 +183,14 @@ class Qt(Package):
 
     @when('@5')
     def configure(self):
-        configure('-no-eglfs',
-                  '-no-directfb',
-                  '-qt-xcb',
+        configure(#'-no-eglfs',
+                  #'-no-directfb',
+                  #'-qt-xcb',
+                  #'-arch', 'x86_64',
+                  #'-sdk', 'macosx10.11',
                   # If someone wants to get a webkit build working, be my guest!
                   '-skip', 'qtwebkit',
+                  '-skip', 'qtwebengine',
                   *self.common_config_args)
 
 
