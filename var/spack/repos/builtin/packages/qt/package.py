@@ -8,11 +8,14 @@ class Qt(Package):
     list_url   = 'http://download.qt-project.org/official_releases/qt/'
     list_depth = 2
 
+    version('5.6.0', '7a2a867bc12384f4161809136d49d4be',
+            url='http://download.qt.io/official_releases/qt/5.6/5.6.0/single/qt-everywhere-opensource-src-5.6.0.tar.gz')
+
+    version('5.5.1', '59f0216819152b77536cf660b015d784',
+            url='http://download.qt-project.org/official_releases/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.tar.gz')
+
     version('5.4.2', 'fa1c4d819b401b267eb246a543a63ea5',
             url='http://download.qt-project.org/official_releases/qt/5.4/5.4.2/single/qt-everywhere-opensource-src-5.4.2.tar.gz')
-
-    version('5.4.0', 'e8654e4b37dd98039ba20da7a53877e6',
-            url='http://download.qt-project.org/official_releases/qt/5.4/5.4.0/single/qt-everywhere-opensource-src-5.4.0.tar.gz')
 
     version('5.3.2', 'febb001129927a70174467ecb508a682',
             url='http://download.qt.io/archive/qt/5.3/5.3.2/single/qt-everywhere-opensource-src-5.3.2.tar.gz')
