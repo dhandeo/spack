@@ -138,7 +138,7 @@ class Qt(Package):
                   #'-arch', 'x86_64',
                   #'-sdk', 'macosx10.11',
                   # If someone wants to get a webkit build working, be my guest!
-                  '-skip', 'qtwebkit',
+                  #'-skip', 'qtwebkit',
                   '-skip', 'qtwebengine',
                   *self.common_config_args)
 
