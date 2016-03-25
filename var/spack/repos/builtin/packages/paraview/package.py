@@ -23,7 +23,7 @@ class Paraview(Package):
     depends_on('py-matplotlib', when='+python')
     depends_on('tcl', when='+tcl')
     depends_on('mpi', when='+mpi')
-    depends_on('qt@:5.5.6', when='+qt')
+    depends_on('qt@:5.6.0', when='+qt')
 
     depends_on('bzip2')
     depends_on('freetype')
@@ -65,6 +65,7 @@ class Paraview(Package):
             feature_args.append('-DVTK_OPENGL_HAS_OSMESA:BOOL=%s' % feature_to_bool('+osmesa'))
             feature_args.append('-DVTK_USE_X:BOOL=%s' % nfeature_to_bool('+osmesa'))
             feature_args.append('-DVTK_RENDERING_BACKEND:STRING=%s' % feature_to_bool('+opengl2', 'OpenGL2', 'OpenGL'))
+            feature_args.append('-DPARAVIEW_QT_VERSION:STRING=5')
 
             feature_args.extend(std_cmake_args)
 
