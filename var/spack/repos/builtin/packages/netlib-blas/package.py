@@ -22,7 +22,7 @@ class NetlibBlas(Package):
         os.symlink('make.inc.example', 'make.inc')
 
         mf = FileFilter('make.inc')
-        if '+fortran' in spec:
+        if '+fortran' in self.spec:
             mf.filter('^FORTRAN.*', 'FORTRAN = f90')
             mf.filter('^LOADER.*',  'LOADER = f90')
         mf.filter('^CC =.*',  'CC = cc')
