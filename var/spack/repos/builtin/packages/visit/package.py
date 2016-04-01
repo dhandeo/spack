@@ -11,6 +11,9 @@ class Visit(Package):
     depends_on("vtk@6.1.0~opengl2")
     depends_on("qt@4.8.6")
     depends_on("python")
+    depends_on("silo")
+    depends_on("hdf5")  # silo seems to need it but not provide the dependency implicitly
+
     # TODO: Other package dependencies from spack
 
     def install(self, spec, prefix):
@@ -20,7 +23,9 @@ class Visit(Package):
                         "-DVTK_MINOR_VERSION=1",
                         "-DCMAKE_INSTALL_PREFIX:PATH=%s" % spec.prefix,
                         "-DVISIT_LOC_QMAKE_EXE:FILEPATH=%s/qmake-qt4" % spec['qt'].prefix.bin,
-                        "-DPYTHON_EXECUTABLE:FILEPATH=%s/python" % spec['python'].prefix.bin]
+                        "-DPYTHON_EXECUTABLE:FILEPATH=%s/python" % spec['python'].prefix.bin,
+                        "-DVISIT_SILO_DIR:PATH=%s" % spec['silo'].prefix,
+                        "-DVISIT_HDF5_DIR:PATH=%s" % spec['hdf5'].prefix]
 
         cmake('./src', *feature_args)
 
