@@ -11,8 +11,8 @@ class Visit(Package):
     depends_on("vtk@6.1.0~opengl2")
     depends_on("qt@4.8.6")
     depends_on("python")
+    depends_on("hdf5@1.8.15")  # silo seems to need it but not provide the dependency implicitly
     depends_on("silo")
-    depends_on("hdf5")  # silo seems to need it but not provide the dependency implicitly
 
     # TODO: Other package dependencies from spack
 

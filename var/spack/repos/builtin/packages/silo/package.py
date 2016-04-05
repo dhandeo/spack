@@ -15,7 +15,7 @@ class Silo(Package):
     variant('fortran', default=True, description='Enable Fortran support')
     variant('silex', default=False, description='Builds Silex, a GUI for viewing Silo files')
 
-    depends_on('hdf5')
+    depends_on('hdf5@1.8.15')
     depends_on('qt', when='+silex')
 
     def install(self, spec, prefix):
