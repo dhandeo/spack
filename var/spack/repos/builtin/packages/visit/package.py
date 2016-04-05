@@ -17,6 +17,8 @@ class Visit(Package):
     # TODO: Other package dependencies from spack
 
     def install(self, spec, prefix):
+        print std_cmake_args
+        print "###"
 
         feature_args = std_cmake_args[:]
         feature_args = ["-DVTK_MAJOR_VERSION=6",
@@ -29,5 +31,5 @@ class Visit(Package):
 
         cmake('./src', *feature_args)
 
-        make()
+        make(parallel=False)
         make("install")
