@@ -6,7 +6,7 @@ class Paraview(Package):
     _url_str = 'http://www.paraview.org/files/v%s/ParaView-v%s-source.tar.gz'
 
     version('4.4.0', 'fa1569857dd680ebb4d7ff89c2227378')
-    version('5.0.0', '4598f0b421460c8bbc635c9a1c3bdbee')
+    version('5.0.1', 'fdf206113369746e2276b95b257d2c9b')
 
     variant('python', default=False, description='Enable Python support')
 
@@ -27,13 +27,13 @@ class Paraview(Package):
 
     depends_on('bzip2')
     depends_on('freetype')
-    depends_on('hdf5+mpi', when='+mpi')
-    depends_on('hdf5~mpi', when='~mpi')
+    #depends_on('hdf5+mpi@1.8.15', when='+mpi') # Paraview needs patching to find system hdf5
+    #depends_on('hdf5~mpi', when='~mpi') # Paraview needs patching to find system hdf5
     depends_on('jpeg')
     depends_on('libpng')
     depends_on('libtiff')
     depends_on('libxml2')
-    depends_on('netcdf')
+    #depends_on('netcdf-cxx') # VTK in paraview uses highly patched version of netcdf 
     #depends_on('protobuf') # version mismatches?
     #depends_on('sqlite') # external version not supported
     depends_on('zlib')
@@ -54,6 +54,10 @@ class Paraview(Package):
                 return feature_to_bool(feature, on='OFF', off='ON')
 
             feature_args = std_cmake_args[:]
+
+	    print feature_args
+	    print "################################"
+
             feature_args.append('-DPARAVIEW_BUILD_QT_GUI:BOOL=%s' % feature_to_bool('+qt'))
             feature_args.append('-DPARAVIEW_ENABLE_PYTHON:BOOL=%s' % feature_to_bool('+python'))
             if '+python' in spec:
@@ -76,13 +80,13 @@ class Paraview(Package):
             cmake('..',
                 '-DCMAKE_INSTALL_PREFIX:PATH=%s' % prefix,
                 '-DBUILD_TESTING:BOOL=OFF',
-                '-DVTK_USER_SYSTEM_FREETYPE:BOOL=ON',
-                '-DVTK_USER_SYSTEM_HDF5:BOOL=ON',
-                '-DVTK_USER_SYSTEM_JPEG:BOOL=ON',
-                '-DVTK_USER_SYSTEM_LIBXML2:BOOL=ON',
-                '-DVTK_USER_SYSTEM_NETCDF:BOOL=ON',
-                '-DVTK_USER_SYSTEM_TIFF:BOOL=ON',
-                '-DVTK_USER_SYSTEM_ZLIB:BOOL=ON',
+          	'-DVTK_USE_SYSTEM_FREETYPE:BOOL=ON',
+                '-DVTK_USE_SYSTEM_HDF5:BOOL=OFF',
+                '-DVTK_USE_SYSTEM_JPEG:BOOL=ON',
+                '-DVTK_USE_SYSTEM_LIBXML2:BOOL=ON',
+                '-DVTK_USE_SYSTEM_NETCDF:BOOL=OFF',
+                '-DVTK_USE_SYSTEM_TIFF:BOOL=ON',
+                '-DVTK_USE_SYSTEM_ZLIB:BOOL=ON',
                 *feature_args)
             make()
             make('install')
