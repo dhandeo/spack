@@ -181,7 +181,7 @@ class Qt(Package):
                   *self.common_config_args)
 
 
-    @when('@5')
+    @when('@5:5.5')
     def configure(self):
         configure(#'-no-eglfs',
                   #'-no-directfb',
@@ -191,6 +191,12 @@ class Qt(Package):
                   # If someone wants to get a webkit build working, be my guest!
                   '-skip', 'qtwebkit',
                   '-skip', 'qtwebengine',
+                  *self.common_config_args)
+
+
+    @when('@5.6')
+    def configure(self):
+        configure('-skip', 'qtwebengine',
                   *self.common_config_args)
 
 
