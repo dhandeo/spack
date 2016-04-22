@@ -27,26 +27,22 @@ class Uvcdat(Package):
     version('2.4.0', 'd4e51d6040a820920c75eebfa9ba256d')
 
     # FIXME: Add dependencies if this package requires them.
-    depends_on("qt@4") # works with 4.8.6
+    # depends_on("qt@4.8") # works with 4.8.6
+    depends_on("py-ipython")
+    depends_on("py-scipy")
     depends_on('zlib')
+    depends_on('libuuid')
     depends_on('jpeg')
     depends_on('libpng')
     depends_on('libtiff')
     depends_on('libxml2')
-    #depends_on('netcdf')
-    #depends_on('netcdf-cxx')
-    #depends_on('protobuf') # version mismatches?
     depends_on('sqlite') # external version not supported
-    depends_on("jpeg") # works with 4.8.6
-    depends_on("qt@4") # works with 4.8.6
-    depends_on("qt@4") # works with 4.8.6
-    depends_on("qt@4") # works with 4.8.6
-
 
     def install(self, spec, prefix):
         # FIXME: Modify the configure line to suit your build system here.
-        cmake('.', *std_cmake_args)
+        self.do_fake_install()
+        # cmake('.', *std_cmake_args)
 
-        # FIXME: Add logic to build and install here
-        make()
-        make("install")
+        # # FIXME: Add logic to build and install here
+        # make()
+        # make("install")
