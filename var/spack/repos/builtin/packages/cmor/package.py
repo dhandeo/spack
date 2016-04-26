@@ -10,9 +10,11 @@ class Cmor(Package):
 
     depends_on('ossp-uuid')
     depends_on('udunits2')
+    depends_on('python')
 
     def install(self, spec, prefix):
         with working_dir('Packages/cmor'):
-            configure("--prefix=%s" % prefix)
+            configure("--prefix=%s" % prefix,
+                      "--with-python")
             make()
             make("install")
