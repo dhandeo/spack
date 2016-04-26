@@ -15,7 +15,8 @@ class Libcdms(Package):
 
     def install(self, spec, prefix):
         # TODO: add optional packages
-        configure('--prefix=%s' % prefix)
+        configure('--prefix=%s' % prefix,
+                  '--with-python')
 
         # Make directories at the destination as the build script does not
         mkdirp(prefix.bin)
