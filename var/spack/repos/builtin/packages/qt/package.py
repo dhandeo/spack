@@ -1,5 +1,6 @@
 from spack import *
 import os
+import sys
 
 class Qt(Package):
     """Qt is a comprehensive cross-platform C++ application framework."""
@@ -31,6 +32,7 @@ class Qt(Package):
     depends_on("gtkplus", when='+gtk')
     depends_on("libxml2")
     depends_on("zlib")
+
     #depends_on("dbus", when='@4:')
     depends_on("libtiff")
     depends_on("libpng")
@@ -104,6 +106,8 @@ class Qt(Package):
 
     @property
     def common_config_args(self):
+        if 'darwin' :
+
         return [
             '-prefix', self.prefix,
             '-v',
@@ -121,6 +125,10 @@ class Qt(Package):
             '-no-pch',
             # NIS is deprecated in more recent glibc
             '-no-nis']
+
+    @property
+    def darwin_config_args(self):
+        return ['--no-bus'
     # Don't disable all the database drivers, but should
     # really get them into spack at some point.
 
@@ -161,6 +169,11 @@ class Qt(Package):
 
     @when('@5.6')
     def configure(self):
+
+        if sys.platform == 'darwin' :
+            darwin_options = [ "--with-build-config=bootstrap-debug" ]
+            options.extend(darwin_options)
+
         configure('-skip', 'qtwebengine',
                   *self.common_config_args)
 
