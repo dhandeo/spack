@@ -23,7 +23,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ##############################################################################
 from spack import *
-import os
+import sys
 
 class Qt(Package):
     """Qt is a comprehensive cross-platform C++ application framework."""
@@ -55,7 +55,6 @@ class Qt(Package):
     depends_on("gtkplus", when='+gtk')
     depends_on("libxml2")
     depends_on("zlib")
-    #depends_on("dbus", when='@4:')
     depends_on("libtiff")
     depends_on("libpng@1.2.56", when='@3')
     depends_on("libpng", when='@4:')
@@ -71,8 +70,16 @@ class Qt(Package):
 
     # OpenGL hardware acceleration
     #depends_on("mesa", when='@4:+mesa')
-    #depends_on("libxcb")
+    if "darwin" in sys.platform:
+        pass
 
+    elif "linux" in sys.platform:
+        depends_on("libxcb")
+        depends_on("dbus", when='@4:')
+        depends_on("xcb-util", when='@5.6:')
+        depends_on("xcb-util-wm", when='@5.6:')
+        depends_on("xcb-util-image", when='@5.6:')
+        depends_on("xcb-util-keysyms", when='@5.6:')
 
     def url_for_version(self, version):
         url = "http://download.qt.io/archive/qt/"
@@ -171,15 +178,21 @@ class Qt(Package):
 
     @when('@4')
     def configure(self):
-        configure('-fast',
-                  '-no-webkit',
-                  # XXX(osx): sdk stuff; should depend on the architecture and the SDKs available.
-                  '-arch', 'x86_64',
-                  '-sdk', '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk',
-                  # XXX(osx): When using Xcode's clang rather than a GCC.
-                  '-platform', 'unsupported/macx-clang',
-                  *self.common_config_args)
+        options = self.common_config_args[:]
 
+        if "darwin" in sys.platform:
+            options.extend(['-fast',
+                    '-no-webkit',
+                    # XXX(osx): sdk stuff; should depend on the architecture and the SDKs available.
+                    '-arch', 'x86_64',
+                    '-sdk', '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk',
+                    # XXX(osx): When using Xcode's clang rather than a GCC.
+                    '-platform', 'unsupported/macx-clang'])
+
+        options.extend(['-no-webkit',
+                       ])
+
+        configure(*options)
 
     @when('@5:5.5')
     def configure(self):
@@ -196,8 +209,13 @@ class Qt(Package):
 
     @when('@5.6')
     def configure(self):
+        options = self.common_config_args[:]
+
+        # if "linux" in sys.platform:
+            # options.extend(["-qt-xcb"])
+
         configure('-skip', 'qtwebengine',
-                  *self.common_config_args)
+                  *options)
 
 
     def install(self, spec, prefix):
