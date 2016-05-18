@@ -122,9 +122,10 @@ class Qt(Package):
             return
 
         # Fix qmake compilers in the default mkspec
-        filter_file(r'^QMAKE_COMPILER *=.*$', 'QMAKE_COMPILER = cc', qmake_conf)
-        filter_file(r'^QMAKE_CC *=.*$',       'QMAKE_CC = cc',       qmake_conf)
-        filter_file(r'^QMAKE_CXX *=.*$',      'QMAKE_CXX = c++',     qmake_conf)
+        filter_file(r'^QMAKE_COMPILER *=.*$', 'QMAKE_COMPILER = cc',
+                    qmake_conf)
+        filter_file(r'^QMAKE_CC *=.*$', 'QMAKE_CC = cc', qmake_conf)
+        filter_file(r'^QMAKE_CXX *=.*$', 'QMAKE_CXX = c++', qmake_conf)
         filter_file(r'^QMAKE_LFLAGS_NOUNDEF *\+?=.*$',
                     'QMAKE_LFLAGS_NOUNDEF =', qmake_unix_conf)
 
@@ -162,7 +163,7 @@ class Qt(Package):
     @when('@3')
     def configure(self):
         # An user report that this was necessary to link Qt3 on ubuntu
-        os.environ['LD_LIBRARY_PATH'] = os.getcwd()+'/lib'
+        os.environ['LD_LIBRARY_PATH'] = os.getcwd() + '/lib'
         configure('-prefix', self.prefix,
                   '-v',
                   '-thread',
@@ -177,9 +178,11 @@ class Qt(Package):
         if "darwin" in sys.platform:
             options.extend(
                 ['-fast',
-                 # XXX(osx): sdk stuff; should depend on the architecture and the SDKs available.
+                 # XXX(osx): sdk stuff; should depend on the architecture and
+                 # the SDKs available.
                  '-arch', 'x86_64',
-                 '-sdk', '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk',
+                 '-sdk', '/Applications/Xcode.app/Contents/Developer/Platfor' +
+                         'ms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk',
                  # XXX(osx): When using Xcode's clang rather than a GCC.
                  '-platform', 'unsupported/macx-clang'])
 
@@ -195,7 +198,8 @@ class Qt(Package):
                     # '-qt-xcb',
                     # '-arch', 'x86_64',
                     # '-sdk', 'macosx10.11',
-                    #  If someone wants to get a webkit build working, be my guest!
+                    # If someone wants to get a webkit build working,i
+                    # be my guest!
                     '-skip', 'qtwebkit',
                     '-skip', 'qtwebengine',
                     *self.common_config_args)
