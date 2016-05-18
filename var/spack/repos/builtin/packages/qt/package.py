@@ -40,8 +40,10 @@ class Qt(Package):
     version('4.8.6',  '2edbe4d6c2eff33ef91732602f3518eb')
     version('3.3.8b', '9f05b4125cfe477cc52c9742c3c09009')
 
-    # Add patch for compile issues with qt3 found with use in the OpenSpeedShop project
-    variant('krellpatch', default=False, description="Build with openspeedshop based patch.")
+    # Add patch for compile issues with qt3 found with use in the OpenSpeedShop
+    # project
+    variant('krellpatch', default=False, description="Build with openspeedshop \
+                                                      based patch.")
     variant('mesa',       default=False, description="Depend on mesa.")
     variant('gtk',        default=False, description="Build with gtkplus.")
 
@@ -120,10 +122,11 @@ class Qt(Package):
             return
 
         # Fix qmake compilers in the default mkspec
-        filter_file(r'^QMAKE_COMPILER *=.*$',  'QMAKE_COMPILER = cc', qmake_conf)
-        filter_file(r'^QMAKE_CC *=.*$',        'QMAKE_CC = cc',       qmake_conf)
-        filter_file(r'^QMAKE_CXX *=.*$',       'QMAKE_CXX = c++',     qmake_conf)
-        filter_file(r'^QMAKE_LFLAGS_NOUNDEF *\+?=.*$',  'QMAKE_LFLAGS_NOUNDEF =', qmake_unix_conf)
+        filter_file(r'^QMAKE_COMPILER *=.*$', 'QMAKE_COMPILER = cc', qmake_conf)
+        filter_file(r'^QMAKE_CC *=.*$',       'QMAKE_CC = cc',       qmake_conf)
+        filter_file(r'^QMAKE_CXX *=.*$',      'QMAKE_CXX = c++',     qmake_conf)
+        filter_file(r'^QMAKE_LFLAGS_NOUNDEF *\+?=.*$',
+                    'QMAKE_LFLAGS_NOUNDEF =', qmake_unix_conf)
 
     @property
     def common_config_args(self):
