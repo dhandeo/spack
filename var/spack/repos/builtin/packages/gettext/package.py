@@ -24,6 +24,7 @@
 ##############################################################################
 from spack import *
 
+
 class Gettext(Package):
     """TODO"""
     homepage = "https://www.gnu.org/software/gettext/"

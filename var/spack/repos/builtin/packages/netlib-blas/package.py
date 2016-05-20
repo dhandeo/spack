@@ -9,7 +9,8 @@ class NetlibBlas(Package):
 
     version('3.5.0', 'b1d3e3e425b2e44a06760ff173104bdf')
 
-    variant('fpic', default=False, description="Build with -fpic compiler option")
+    variant('fpic', default=False, description="Build with -fpic \
+                                                compiler option")
     variant('fortran', default=False, description="Build with Fortran support")
 
     # virtual dependency
@@ -30,7 +31,6 @@ class NetlibBlas(Package):
         if '+fpic' in self.spec:
             mf.filter('^OPTS.*=.*',  'OPTS = -O2 -frecursive -fpic')
             mf.filter('^CFLAGS =.*',  'CFLAGS = -O3 -fpic')
-
 
     def install(self, spec, prefix):
         make('blaslib')
